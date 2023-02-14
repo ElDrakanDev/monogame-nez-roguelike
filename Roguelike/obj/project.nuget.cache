@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "JZzFZxXG9A2sau0aMBr2FzFqTTNa5xZRmMPsl+biuda6dnzIiWxV+8LrnTuj62qrzqGyt4vnceFXHbolaPAcTg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\drakan\\source\\repos\\Roguelike\\Roguelike\\Roguelike.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\drakan\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\drakan\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\drakan\\.nuget\\packages\\monogame.content.builder.task\\3.8.1.303\\monogame.content.builder.task.3.8.1.303.nupkg.sha512",
+    "C:\\Users\\drakan\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512",
+    "C:\\Users\\drakan\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
