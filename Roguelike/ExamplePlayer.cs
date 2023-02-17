@@ -5,18 +5,9 @@ using Nez;
 using System;
 using Microsoft.Xna.Framework;
 using Roguelike.Entities.Projectiles;
-using Roguelike.Entities.Characters;
 
-namespace Roguelike
+namespace Roguelike.Entities.Characters
 {
-    [Flags]
-    public enum LayerMask
-    {
-        None = 1,
-        Ground = 2,
-        Character = 4,
-        Projectile = 8,
-    }
     public class ExamplePlayer : Character
     {
         const string IDLE_ANIM = "IDLE";
@@ -27,13 +18,14 @@ namespace Roguelike
         float acceleration = 40f;
         float gravity = 30f;
         float jumpForce = -14f;
-        public ExamplePlayer() : base() { }
 
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Size = new(32, 32);
+            Size = new(28, 28);
             Stats = new CharacterStats(50);
+            Team = Teams.Player;
+            TargetTeams = (int)Teams.Enemy;
         }
         public override void OnAddedToEntity()
         {
@@ -112,12 +104,12 @@ namespace Roguelike
             if (animation != null && !_spriteAnimator.IsAnimationActive(animation))
                 _spriteAnimator.Play(animation);
         }
-        float _cooldown = 0.1f;
+        float _cooldown = 0.01f;
         float _counter;
         void Shoot()
         {
-            int shots = 1;
-            float spread = 0f;
+            int shots = 5;
+            float spread = 60 * Mathf.Deg2Rad;
             _counter -= Time.DeltaTime;
             if (Input.LeftMouseButtonDown && _counter < 0)
             {
@@ -131,7 +123,7 @@ namespace Roguelike
                     direction = Vector2Ext.FromDirectionAngle(angle);
                     var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
                     var projectile = Projectile.Create(
-                        new(new ProjectileStats(5f, direction * 6f, 15f, 2f, bounces: 0), projectileSprite.Bounds.Size.ToVector2() - new Vector2(2, 2)),
+                        new(new ProjectileStats(5f, direction * 6f, 15f, 2f, (int)Teams.Enemy, bounces: 3), projectileSprite.Bounds.Size.ToVector2() - new Vector2(2, 2)),
                         Entity.Position + direction * 35 
                     );
                     projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite));

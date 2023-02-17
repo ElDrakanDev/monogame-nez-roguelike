@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Tiled;
+using Roguelike.Entities.Characters;
 using Roguelike.World;
 
 namespace Roguelike.Entities.Projectiles
@@ -52,7 +53,6 @@ namespace Roguelike.Entities.Projectiles
             Move();
             NotifyCollisions();
         }
-
         void Move()
         {
             if (Stats.GroundCollide)
@@ -65,7 +65,6 @@ namespace Roguelike.Entities.Projectiles
                 Entity.Position += Velocity * Time.DeltaTime * TimeScale;
             }
         }
-
         protected virtual void OnWallCollision()
         {
             if (Stats.Bounces <= 0)
@@ -86,26 +85,29 @@ namespace Roguelike.Entities.Projectiles
                 }
             }
         }
-
         public void TickLifeTime()
         {
             LifeTime -= Time.DeltaTime * TimeScale;
             if (LifeTime <= 0) OnLifeTimeEnd();
         }
-
         public void OnLifeTimeEnd()
         {
             Entity.Destroy();
         }
-
         protected virtual void NotifyCollisions()
         {
             var neighbors = Physics.BoxcastBroadphase(Collider.Bounds, Collider.CollidesWithLayers);
             foreach (var neighbor in neighbors)
             {
-                if (neighbor.Enabled && HitEntities.Contains(neighbor) is false && Collider.Overlaps(neighbor) && neighbor.Entity.TryGetComponent(out HealthManager healthManager))
+                if (
+                    neighbor.Enabled &&
+                    HitEntities.Contains(neighbor) is false &&
+                    Collider.Overlaps(neighbor) &&
+                    neighbor.Entity.TryGetComponent(out Character character) &&
+                    Flags.IsFlagSet(Stats.TargetTeams, (int)character.Team)
+                )
                 {
-                    healthManager.Hit(new DamageInfo(Stats.Damage, Stats.KnockBack, this));
+                    character.HealthManager.Hit(new DamageInfo(Stats.Damage, Stats.KnockBack, this));
                     HitEntities.Add(neighbor);
                 }
             }

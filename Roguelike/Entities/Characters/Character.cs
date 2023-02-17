@@ -16,9 +16,11 @@ namespace Roguelike.Entities.Characters
         public TiledMapMover.CollisionState CollisionState = new();
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
         public BoxCollider Collider { get; private set; }
-        protected HealthManager _healthManager;
+        public HealthManager HealthManager { get; private set; }
         protected SpriteAnimator _spriteAnimator;
         TiledMapMover _mapMover => Level.Instance.TiledMapMover;
+        public Teams Team;
+        public int TargetTeams;
         public Character()
         {
             SetDefaults();
@@ -27,7 +29,7 @@ namespace Roguelike.Entities.Characters
         /// Set default entity values
         /// </summary>
         public virtual void SetDefaults() { }
-        public static Character Create(Character character, Vector2 position)
+        public static T Create<T>(T character, Vector2 position) where T : Character
         {
             Core.Scene.AddEntity(new()).AddComponent(character);
             character.Entity.Position = position;
@@ -40,20 +42,20 @@ namespace Roguelike.Entities.Characters
             Characters.Add(this);
 
             _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
-            _healthManager = Entity.AddComponent(new HealthManager(Stats.MaxHealth, Stats.Health, 1));
+            HealthManager = Entity.AddComponent(new HealthManager(Stats.MaxHealth, Stats.Health, 1));
             Collider = Entity.AddComponent(new BoxCollider(Size.X, Size.Y));
             Collider.PhysicsLayer = (int)LayerMask.Character;
 
-            _healthManager.onDamageTaken += OnDamageTaken;
-            _healthManager.onDeath += Die;
+            HealthManager.onDamageTaken += OnDamageTaken;
+            HealthManager.onDeath += Die;
         }
         public override void OnRemovedFromEntity()
         {
             base.OnRemovedFromEntity();
             Characters.Remove(this);
 
-            _healthManager.onDamageTaken -= OnDamageTaken;
-            _healthManager.onDeath -= Die;
+            HealthManager.onDamageTaken -= OnDamageTaken;
+            HealthManager.onDeath -= Die;
         }
         public virtual void Update() => Move();
         public virtual void OnDamageTaken(DamageInfo damageInfo)

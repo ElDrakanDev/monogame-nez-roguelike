@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Nez;
-using Nez.UI;
 using Roguelike.Helpers;
 using Roguelike.World;
-using Roguelike.Entities;
+using Roguelike.Entities.Characters;
 
 namespace Roguelike
 {
@@ -20,15 +19,17 @@ namespace Roguelike
             Screen.SetSize(800, 600);
             RNG.Initialize(1);
             Camera.AddComponent(new CameraBounds());
-            var cameraFollow = Camera.AddComponent(new CameraFollow());
             _level = LevelGenerator.GenerateLevel(ContentPath.Tiled.Directory, new() { { RoomType.Fight, 2}, {RoomType.Boss, 1 }, {RoomType.Shop, 1 } });
             CreateEntity("level").AddComponent(_level);
-            _player = CreateEntity("player1").AddComponent(new ExamplePlayer());
-            cameraFollow.AddTarget(_player.Transform);
+    
         }
         public override void Begin()
         {
             base.Begin();
+            _player = Character.Create(new ExamplePlayer(), new Vector2(200, 200));
+            var cameraFollow = Camera.AddComponent(new CameraFollow());
+            cameraFollow.AddTarget(_player.Transform);
+            Character.Create(new ExampleEnemy(), new Vector2(300, 300));
             SwitchRoom(Point.Zero);
         }
         public override void Update()

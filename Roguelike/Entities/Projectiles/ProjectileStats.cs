@@ -12,10 +12,11 @@ namespace Roguelike.Entities.Projectiles
         public bool GroundCollide = true;
         public float LifeTime;
         public float Force;
+        public int TargetTeams;
         public float Speed { get => Velocity.Magnitude(); set => Velocity = Velocity.Normalized() * value; }
         public Vector2 KnockBack { get => Velocity.Normalized() * Force; }
 
-        public ProjectileStats(float damage, Vector2 velocity, float lifeTime, float force, bool groundCollide = true, int bounces = 0, int pierces = 0)
+        public ProjectileStats(float damage, Vector2 velocity, float lifeTime, float force, int targetTeams, bool groundCollide = true, int bounces = 0, int pierces = 0)
         {
             Damage = damage;
             Velocity = velocity;
@@ -24,6 +25,7 @@ namespace Roguelike.Entities.Projectiles
             GroundCollide = groundCollide;
             LifeTime = lifeTime;
             Force = force;
+            TargetTeams = targetTeams;
         }
     }
 }
