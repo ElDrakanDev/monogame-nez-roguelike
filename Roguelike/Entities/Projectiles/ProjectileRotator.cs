@@ -10,7 +10,7 @@ namespace Roguelike.Entities.Projectiles
         {
             base.OnAddedToEntity();
 
-            _projectile = (Projectile)Entity;
+            _projectile = Entity.GetComponent<Projectile>();
         }
         public void Update()
         {

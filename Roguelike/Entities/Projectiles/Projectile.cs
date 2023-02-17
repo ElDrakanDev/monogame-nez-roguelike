@@ -6,9 +6,9 @@ using Roguelike.World;
 
 namespace Roguelike.Entities.Projectiles
 {
-    public class Projectile : Entity, IUpdatable, ITimeScalable, ILifeTimed
+    public class Projectile : Component, IUpdatable, ITimeScalable, ILifeTimed
     {
-        public static List<Projectile> Projectiles = new List<Projectile>();
+        public static readonly List<Projectile> Projectiles = new();
         public readonly List<Collider> HitEntities = new();
         public ProjectileStats Stats;
         public Vector2 Size { get; set; }
@@ -17,33 +17,37 @@ namespace Roguelike.Entities.Projectiles
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
         public BoxCollider Collider { get; private set; }
 
-        TiledMapMover.CollisionState collisionState = new();
+        TiledMapMover _mapMover => Level.Instance.TiledMapMover;
+        public TiledMapMover.CollisionState CollisionState = new();
 
-        public Projectile(Vector2 position, ProjectileStats stats, Vector2 size)
+        public Projectile(ProjectileStats stats, Vector2 size)
         {
-            Position = position;
-            Size = size;
             Stats = stats;
-            collisionState.ShouldTestPlatforms = false;
+            Size = size;
         }
-        public override void OnAddedToScene()
+        public static Projectile Create(Projectile projectile, Vector2 position)
         {
-            base.OnAddedToScene();
-            Collider = AddComponent(new BoxCollider(Size.X, Size.Y));
+            Core.Scene.AddEntity(new()).AddComponent(projectile);
+            projectile.Entity.Position = position;
+            projectile.CollisionState.ShouldTestPlatforms = false;
+            return projectile;
+        }
+        public override void OnAddedToEntity()
+        {
+            base.OnAddedToEntity();
+            Collider = Entity.AddComponent(new BoxCollider(Size.X, Size.Y));
             Collider.PhysicsLayer = (int)LayerMask.Projectile;
             Collider.CollidesWithLayers = (int)LayerMask.Character;
             Projectiles.Add(this);
         }
-        public override void OnRemovedFromScene()
+        public override void OnRemovedFromEntity()
         {
-            base.OnRemovedFromScene();
+            base.OnRemovedFromEntity();
 
             Projectiles.Remove(this);
         }
-        public override void Update()
+        public void Update()
         {
-            base.Update();
-
             TickLifeTime();
             Move();
             NotifyCollisions();
@@ -53,25 +57,33 @@ namespace Roguelike.Entities.Projectiles
         {
             if (Stats.GroundCollide)
             {
-                Level.Instance.TiledMapMover.Move(Velocity, Collider, collisionState);
-                if (collisionState.HasCollision) OnWallCollision();
+                _mapMover.Move(Velocity, Collider, CollisionState);
+                if (CollisionState.HasCollision) OnWallCollision();
             }
             else
             {
-                Position += Velocity * Time.DeltaTime * TimeScale;
+                Entity.Position += Velocity * Time.DeltaTime * TimeScale;
             }
         }
 
         protected virtual void OnWallCollision()
         {
-            if(Stats.Bounces == 0)
-                Destroy();
+            if (Stats.Bounces <= 0)
+                Entity.Destroy();
             else
             {
                 HitEntities.Clear();
-                Stats.Bounces--;
-                if (collisionState.Left || collisionState.Right) Velocity = new Vector2(-Velocity.X, Velocity.Y);
-                if (collisionState.Above || collisionState.Below) Velocity = new Vector2(Velocity.X, -Velocity.Y);
+                if (CollisionState.Left || CollisionState.Right)
+                {
+                    Velocity = new Vector2(-Velocity.X, Velocity.Y);
+                    Stats.Bounces--;
+
+                }
+                if (CollisionState.Above || CollisionState.Below)
+                {
+                    Velocity = new Vector2(Velocity.X, -Velocity.Y);
+                    Stats.Bounces--;
+                }
             }
         }
 
@@ -83,7 +95,7 @@ namespace Roguelike.Entities.Projectiles
 
         public void OnLifeTimeEnd()
         {
-            Destroy();
+            Entity.Destroy();
         }
 
         protected virtual void NotifyCollisions()

@@ -16,7 +16,7 @@ namespace Roguelike
         {
             base.Initialize();
 
-            SetDesignResolution(600, 400, SceneResolutionPolicy.BestFit);
+            SetDesignResolution(800, 600, SceneResolutionPolicy.BestFit);
             Screen.SetSize(800, 600);
             RNG.Initialize(1);
             Camera.AddComponent(new CameraBounds());
@@ -24,13 +24,12 @@ namespace Roguelike
             _level = LevelGenerator.GenerateLevel(ContentPath.Tiled.Directory, new() { { RoomType.Fight, 2}, {RoomType.Boss, 1 }, {RoomType.Shop, 1 } });
             CreateEntity("level").AddComponent(_level);
             _player = CreateEntity("player1").AddComponent(new ExamplePlayer());
-            _player.Entity.Position = new Vector2(200, 200);
             cameraFollow.AddTarget(_player.Transform);
         }
         public override void Begin()
         {
             base.Begin();
-            _level.EnterStartRoom();
+            SwitchRoom(Point.Zero);
         }
         public override void Update()
         {

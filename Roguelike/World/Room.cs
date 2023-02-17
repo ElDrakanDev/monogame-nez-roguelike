@@ -68,7 +68,7 @@ namespace Roguelike.World
         }
         public void Exit()
         {
-            foreach (var projectile in Projectile.Projectiles) projectile.Destroy();
+            foreach (var projectile in Projectile.Projectiles) projectile.Entity.Destroy();
             TilemapRenderer.RemoveColliders();
             TilemapRenderer.Enabled = false;
             Enabled = false;
