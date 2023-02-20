@@ -57,7 +57,7 @@ namespace Roguelike.Entities.Characters
                         new(new ProjectileStats(5, direction * 5, 5, 5, (int)Teams.Player), projectileSprite.Bounds.Size.ToVector2()),
                         Entity.Position
                     );
-                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite));
+                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite) { Color = Color.Red});
                     projectile.Entity.AddComponent(new ProjectileRotator());
                 }
             }

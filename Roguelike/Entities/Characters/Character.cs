@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Nez.Tiled;
 using Roguelike.World;
 using Nez.Sprites;
+using System;
 
 namespace Roguelike.Entities.Characters
 {
@@ -36,6 +37,7 @@ namespace Roguelike.Entities.Characters
             character.Entity.Position = position;
             return character;
         }
+        #region Lifecycle
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
@@ -59,6 +61,7 @@ namespace Roguelike.Entities.Characters
             HealthManager.onDeath -= Die;
         }
         public virtual void Update() => Move();
+        #endregion
         public virtual void OnDamageTaken(DamageInfo damageInfo)
         {
             Color initial = _spriteAnimator.Color == Color.Red ? Color.White : _spriteAnimator.Color;
@@ -66,7 +69,15 @@ namespace Roguelike.Entities.Characters
             Velocity += damageInfo.Knockback;
             Core.Schedule(0.1f, _ => _spriteAnimator.Color = initial);
         }
-        public virtual void Die(DeathInfo deathInfo) => Entity.Destroy();
+        public virtual void Die(DeathInfo deathInfo)
+        {
+            OnCharacterDeath(this);
+            Entity.Destroy();
+        }
         public virtual void Move() => _mapMover.Move(Velocity, Collider, CollisionState);
+        #region Events
+        public static event Action<Character> onCharacterDeath;
+        public static void OnCharacterDeath(Character c) => onCharacterDeath?.Invoke(c);
+        #endregion
     }
 }

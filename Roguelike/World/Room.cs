@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Nez.Tiled;
 using Nez;
 using Microsoft.Xna.Framework;
 using Roguelike.Entities.Projectiles;
+using Roguelike.Entities.Characters;
 
 namespace Roguelike.World
 {
@@ -20,6 +22,7 @@ namespace Roguelike.World
         public RoomType Type { get; private set; }
         public Entity EntranceDoor { get; private set; }
         public Entity ExitDoor { get; private set; }
+        Dictionary<string, Entity> _charactersByTiledKey = new();
         public Room(string tiledMapPath, RoomType type)
         {
             _tiledMapPath = tiledMapPath;
@@ -37,16 +40,75 @@ namespace Roguelike.World
                 Tilemap.TileWidth * (Tilemap.Width - 1),
                 Tilemap.TileWidth * (Tilemap.Height - 1)
             );
+
             // Desactivar componentes agregados
             TilemapRenderer.Enabled = false;
             Enabled = false;
         }
+        #region Events
+        public override void OnEnabled()
+        {
+            base.OnEnabled();
+            Character.onCharacterDeath += RemoveDeadCharacters;
+        }
+        public override void OnDisabled()
+        {
+            base.OnDisabled();
+            Character.onCharacterDeath -= RemoveDeadCharacters;
+        }
+        void RemoveDeadCharacters(Character character)
+        {
+            string found = null;
+            foreach(var pair in _charactersByTiledKey)
+            {
+                if (pair.Value == character.Entity)
+                {
+                    found = pair.Key;
+                    break;
+                }
+            }
+            if (_charactersByTiledKey.Remove(found))
+            {
+                var charactersGroup = Tilemap.GetObjectGroup("characters");
+                charactersGroup.Objects.Remove(found);
+            }
+        }
+        #endregion
         public void Enter()
         {
             Entity.Scene.Camera.GetComponent<CameraBounds>().SetBounds(_topLeft, _bottomRight);
             TilemapRenderer.Enabled = true;
             Enabled = true;
-            if(EntranceDoor is null)
+            CreateDoorsIfNull();
+            ResetChildCharacters();
+        }
+        public void Exit()
+        {
+            foreach (var projectile in Projectile.Projectiles)
+                projectile.Entity.Destroy();
+            foreach (var entity in _charactersByTiledKey.Values)
+                entity.Destroy();
+            _charactersByTiledKey.Clear();
+            TilemapRenderer.RemoveColliders();
+            TilemapRenderer.Enabled = false;
+            Enabled = false;
+        }
+        TmxLayerTile _getSolidTileBelow(Vector2 position)
+        {
+            var startPoint = Tilemap.WorldToTilePosition(position);
+            int searchLimit = 10;
+            for (int i = 0; i < searchLimit; i++)
+            {
+                var checkPosition = new Point(startPoint.X, startPoint.Y + i);
+                var tile = TilemapRenderer.CollisionLayer.GetTile(checkPosition.X, checkPosition.Y);
+                if (tile != null) return tile;
+            }
+            return null;
+        }
+        #region Child Entities Management
+        void CreateDoorsIfNull()
+        {
+            if (EntranceDoor is null)
             {
                 var doorsGroup = Tilemap.GetObjectGroup("doors");
                 var entranceObj = doorsGroup.Objects["entrance"];
@@ -66,24 +128,28 @@ namespace Roguelike.World
                 ExitDoor.Position = Tilemap.TileToWorldPosition(new Point(exitGround.X, exitGround.Y)) - Vector2.UnitY * halfTileSize;
             }
         }
-        public void Exit()
+        void ResetChildCharacters()
         {
-            foreach (var projectile in Projectile.Projectiles) projectile.Entity.Destroy();
-            TilemapRenderer.RemoveColliders();
-            TilemapRenderer.Enabled = false;
-            Enabled = false;
-        }
-        TmxLayerTile _getSolidTileBelow(Vector2 position)
-        {
-            var startPoint = Tilemap.WorldToTilePosition(position);
-            int searchLimit = 10;
-            for (int i = 0; i < searchLimit; i++)
+            var charactersGroup = Tilemap.GetObjectGroup("characters");
+            if (charactersGroup is null) return;
+            foreach(var characterObject in charactersGroup.Objects)
             {
-                var checkPosition = new Point(startPoint.X, startPoint.Y + i);
-                var tile = TilemapRenderer.CollisionLayer.GetTile(checkPosition.X, checkPosition.Y);
-                if (tile != null) return tile;
+                try
+                {
+                    Type characterType = System.Type.GetType(characterObject.Type);
+                    Character character = Activator.CreateInstance(characterType) as Character;
+                    Entity characterEntity = new();
+                    characterEntity.AddComponent(character);
+                    characterEntity.Position = Tilemap.ToWorldPosition(new Vector2(characterObject.X, characterObject.Y));
+                    _charactersByTiledKey.Add(characterObject.Name, characterEntity);
+                    Entity.Scene.AddEntity(characterEntity);
+                }
+                catch(ArgumentException ex)
+                {
+                    Debug.Error($"Error creating instance of Character subclass with full name {characterObject.Type}. {ex.Message}");
+                }
             }
-            return null;
         }
+        #endregion
     }
 }

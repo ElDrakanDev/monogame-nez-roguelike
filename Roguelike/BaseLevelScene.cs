@@ -29,7 +29,6 @@ namespace Roguelike
             _player = Character.Create(new ExamplePlayer(), new Vector2(200, 200));
             var cameraFollow = Camera.AddComponent(new CameraFollow());
             cameraFollow.AddTarget(_player.Transform);
-            Character.Create(new ExampleEnemy(), new Vector2(300, 300));
             SwitchRoom(Point.Zero);
         }
         public override void Update()
