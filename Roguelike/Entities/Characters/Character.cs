@@ -15,6 +15,7 @@ namespace Roguelike.Entities.Characters
         public CharacterStats Stats;
         public TiledMapMover.CollisionState CollisionState = new();
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
+        public float DeltaTime => Stats.TimeScale * Time.DeltaTime;
         public BoxCollider Collider { get; private set; }
         public HealthManager HealthManager { get; private set; }
         protected SpriteAnimator _spriteAnimator;

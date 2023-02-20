@@ -104,23 +104,23 @@ namespace Roguelike.Entities.Characters
             if (animation != null && !_spriteAnimator.IsAnimationActive(animation))
                 _spriteAnimator.Play(animation);
         }
-        float _cooldown = 0.01f;
+        float _cooldown = 0.5f;
         float _counter;
         void Shoot()
         {
-            int shots = 5;
-            float spread = 60 * Mathf.Deg2Rad;
-            _counter -= Time.DeltaTime;
+            int shots = 3;
+            float spread = 45 * Mathf.Deg2Rad;
+            _counter -= DeltaTime;
             if (Input.LeftMouseButtonDown && _counter < 0)
             {
+                var aimDirection = (Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position).Normalized();
                 _counter = _cooldown;
-                for (int i = 1; i <= shots; i++)
+                for (int i = 0; i < shots; i++)
                 {
-                    float percentage = i / (float)shots;
+                    float percentage = i / (float)(shots - 1);
                     float spreadAngle = spread * percentage - spread * 0.5f;
-                    var direction = (Entity.Scene.Camera.MouseToWorldPoint() - Entity.Position).Normalized();
-                    var angle = direction.GetDirectionAngle() + spreadAngle;
-                    direction = Vector2Ext.FromDirectionAngle(angle);
+                    var angle = aimDirection.GetDirectionAngle() + spreadAngle;
+                    var direction = Vector2Ext.FromDirectionAngle(angle);
                     var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
                     var projectile = Projectile.Create(
                         new(new ProjectileStats(5f, direction * 6f, 15f, 2f, (int)Teams.Enemy, bounces: 3), projectileSprite.Bounds.Size.ToVector2() - new Vector2(2, 2)),
