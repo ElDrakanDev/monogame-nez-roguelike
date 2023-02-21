@@ -1,1 +1,0 @@
-../TiledRules/orange_autotiles.tmx

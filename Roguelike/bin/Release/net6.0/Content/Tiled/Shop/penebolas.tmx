@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="3">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="5">
  <tileset firstgid="1" source="../TiledRules/TilesetOrange.tsx"/>
  <tileset firstgid="25" source="../TiledRules/AutomappingIcons.tsx"/>
  <layer id="2" name="background" width="50" height="20">
@@ -33,6 +33,10 @@
   <object id="2" name="exit" x="1225.63" y="290.324">
    <point/>
   </object>
+ </objectgroup>
+ <objectgroup id="4" name="characters">
+  <object id="3" template="../Fight/ExampleEnemy.tx" x="449.333" y="372"/>
+  <object id="4" template="../Fight/ExampleEnemy.tx" x="1009.33" y="309.333"/>
  </objectgroup>
  <layer id="1" name="ground" width="50" height="20">
   <data encoding="csv">

@@ -22,7 +22,7 @@ namespace Roguelike.World
         public RoomType Type { get; private set; }
         public Entity EntranceDoor { get; private set; }
         public Entity ExitDoor { get; private set; }
-        Dictionary<string, Entity> _charactersByTiledKey = new();
+        Dictionary<TmxObject, Entity> _charactersByTmxObject = new();
         public Room(string tiledMapPath, RoomType type)
         {
             _tiledMapPath = tiledMapPath;
@@ -58,8 +58,8 @@ namespace Roguelike.World
         }
         void RemoveDeadCharacters(Character character)
         {
-            string found = null;
-            foreach(var pair in _charactersByTiledKey)
+            TmxObject found = null;
+            foreach(var pair in _charactersByTmxObject)
             {
                 if (pair.Value == character.Entity)
                 {
@@ -67,7 +67,7 @@ namespace Roguelike.World
                     break;
                 }
             }
-            if (_charactersByTiledKey.Remove(found))
+            if (found is not null && _charactersByTmxObject.Remove(found))
             {
                 var charactersGroup = Tilemap.GetObjectGroup("characters");
                 charactersGroup.Objects.Remove(found);
@@ -86,9 +86,9 @@ namespace Roguelike.World
         {
             foreach (var projectile in Projectile.Projectiles)
                 projectile.Entity.Destroy();
-            foreach (var entity in _charactersByTiledKey.Values)
+            foreach (var entity in _charactersByTmxObject.Values)
                 entity.Destroy();
-            _charactersByTiledKey.Clear();
+            _charactersByTmxObject.Clear();
             TilemapRenderer.RemoveColliders();
             TilemapRenderer.Enabled = false;
             Enabled = false;
@@ -136,12 +136,19 @@ namespace Roguelike.World
             {
                 try
                 {
-                    Type characterType = System.Type.GetType(characterObject.Type);
+                    Type characterType = null;
+                    if(characterObject.Template == string.Empty)
+                        characterType = System.Type.GetType(characterObject.Type);
+                    else
+                    {
+                        TmxTemplate template = Entity.Scene.Content.LoadTmxTemplate(characterObject.Template);
+                        characterType = System.Type.GetType(template.Type); ;
+                    }
                     Character character = Activator.CreateInstance(characterType) as Character;
                     Entity characterEntity = new();
                     characterEntity.AddComponent(character);
                     characterEntity.Position = Tilemap.ToWorldPosition(new Vector2(characterObject.X, characterObject.Y));
-                    _charactersByTiledKey.Add(characterObject.Name, characterEntity);
+                    _charactersByTmxObject.Add(characterObject, characterEntity);
                     Entity.Scene.AddEntity(characterEntity);
                 }
                 catch(ArgumentException ex)

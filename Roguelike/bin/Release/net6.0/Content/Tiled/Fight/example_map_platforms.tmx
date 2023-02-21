@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="13">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="16">
  <properties>
   <property name="roomType" value="Start"/>
  </properties>
@@ -46,6 +46,10 @@
   <object id="11" name="exit" x="937.947" y="316.836">
    <point/>
   </object>
+ </objectgroup>
+ <objectgroup id="5" name="characters">
+  <object id="13" template="ExampleEnemy.tx" class="Roguelike.Entities.Characters.ExampleEnemy" x="463.391" y="595.987"/>
+  <object id="15" template="ExampleEnemy.tx" class="Roguelike.Entities.Characters.ExampleEnemy" x="869.555" y="598.779"/>
  </objectgroup>
  <layer id="1" name="ground" width="40" height="30">
   <data encoding="csv">
