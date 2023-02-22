@@ -4,14 +4,14 @@
     "C:\\Users\\drakan\\source\\repos\\Roguelike\\Roguelike\\Roguelike.csproj": {}
   },
   "projects": {
-    "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj": {
+    "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj",
+        "projectUniqueName": "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj",
         "projectName": "Nez",
-        "projectPath": "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj",
+        "projectPath": "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj",
         "packagesPath": "C:\\Users\\drakan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\obj\\Nez.MG38\\",
+        "outputPath": "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\obj\\Nez.MG38\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "configFilePaths": [
@@ -95,8 +95,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj": {
-                "projectPath": "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj"
+              "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj": {
+                "projectPath": "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj"
               }
             }
           }

@@ -255,8 +255,8 @@
     },
     "Nez/1.0.0": {
       "type": "project",
-      "path": "../../Nez/Nez.Portable/Nez.MG38.csproj",
-      "msbuildProject": "../../Nez/Nez.Portable/Nez.MG38.csproj"
+      "path": "../Nez.Portable/Nez.MG38.csproj",
+      "msbuildProject": "../Nez.Portable/Nez.MG38.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -293,8 +293,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj": {
-              "projectPath": "C:\\Users\\drakan\\source\\repos\\Nez\\Nez.Portable\\Nez.MG38.csproj"
+            "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj": {
+              "projectPath": "C:\\Users\\drakan\\source\\repos\\Roguelike\\Nez.Portable\\Nez.MG38.csproj"
             }
           }
         }

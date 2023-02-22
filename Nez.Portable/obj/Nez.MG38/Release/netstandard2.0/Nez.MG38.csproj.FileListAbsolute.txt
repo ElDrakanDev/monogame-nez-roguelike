@@ -1,0 +1,10 @@
+C:\Users\drakan\source\repos\Nez\Nez.Portable\bin\Release\netstandard2.0\Nez.deps.json
+C:\Users\drakan\source\repos\Nez\Nez.Portable\bin\Release\netstandard2.0\Nez.dll
+C:\Users\drakan\source\repos\Nez\Nez.Portable\bin\Release\netstandard2.0\Nez.pdb
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.MG38.csproj.AssemblyReference.cache
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.MG38.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.MG38.AssemblyInfoInputs.cache
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.MG38.AssemblyInfo.cs
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.MG38.csproj.CoreCompileInputs.cache
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.dll
+C:\Users\drakan\source\repos\Nez\Nez.Portable\obj\Nez.MG38\Release\netstandard2.0\Nez.pdb
