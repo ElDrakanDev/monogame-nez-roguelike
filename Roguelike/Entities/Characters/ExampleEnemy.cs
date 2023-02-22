@@ -39,7 +39,7 @@ namespace Roguelike.Entities.Characters
 
                 foreach(var character in Character.Characters)
                 {
-                    if (character == this) continue;
+                    if (character == this || Flags.IsFlagSet(TargetTeams, (int)character.Team) is false) continue;
                     float distance = Vector2.Distance(Entity.Position, character.Entity.Position);
                     if(distance < closestDistance)
                     {
