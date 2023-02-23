@@ -10,6 +10,7 @@ namespace Roguelike.Entities.Characters
     {
         const float MAX_COOLDOWN = 1.5f;
         float _cooldown = MAX_COOLDOWN;
+        Color _shootColor = Color.Red;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -25,7 +26,13 @@ namespace Roguelike.Entities.Characters
 
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
             _spriteAnimator.Sprite = new Sprite(texture);
-            _spriteAnimator.Color = Color.Yellow;
+            if (Random.Chance(0.3f))
+            {
+                _spriteAnimator.Color = Color.Green;
+                Team = Teams.Player;
+                TargetTeams = (int)Teams.Enemy;
+                _shootColor = Color.White;
+            }
         }
         public override void Update()
         {
@@ -54,10 +61,14 @@ namespace Roguelike.Entities.Characters
                     var direction = (closest.Entity.Position - Entity.Position).Normalized();
                     var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
                     var projectile = Projectile.Create(
-                        new(new ProjectileStats(5, direction * 5, 5, 5, (int)Teams.Player), projectileSprite.Bounds.Size.ToVector2()),
+                        new(
+                            new ProjectileStats(5, direction * 5 * 60, 5, 5, TargetTeams),
+                            projectileSprite.Bounds.Size.ToVector2(),
+                            this
+                        ),
                         Entity.Position
                     );
-                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite) { Color = Color.Red});
+                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite) { Color = _shootColor});
                     projectile.Entity.AddComponent(new ProjectileRotator());
                 }
             }

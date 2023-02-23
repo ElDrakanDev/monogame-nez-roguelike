@@ -74,7 +74,7 @@ namespace Roguelike.Entities.Characters
             OnCharacterDeath(this);
             Entity.Destroy();
         }
-        public virtual void Move() => _mapMover.Move(Velocity, Collider, CollisionState);
+        public virtual void Move() => _mapMover.Move(Time.DeltaTime * TimeScale * Velocity, Collider, CollisionState);
         #region Events
         public static event Action<Character> onCharacterDeath;
         public static void OnCharacterDeath(Character c) => onCharacterDeath?.Invoke(c);

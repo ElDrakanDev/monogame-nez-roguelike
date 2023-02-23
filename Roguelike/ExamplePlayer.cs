@@ -14,10 +14,10 @@ namespace Roguelike.Entities.Characters
         const string RUN_ANIM = "RUN";
         const string AIR_ANIM = "AIR";
 
-        float speed = 8f;
-        float acceleration = 40f;
-        float gravity = 30f;
-        float jumpForce = -14f;
+        float speed = 8f * 60;
+        float acceleration = 40f * 60;
+        float gravity = 30f * 60;
+        float jumpForce = -14f * 60;
 
         public override void SetDefaults()
         {
@@ -33,12 +33,7 @@ namespace Roguelike.Entities.Characters
 
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
             var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
-            //healthManager.onDeath += _ => Entity.Destroy();
-            //healthManager.onDamageTaken += damageInfo => {
-            //    _animator.Color = Color.Red;
-            //    Velocity += damageInfo.Knockback;
-            //    Core.Schedule(0.1f, _ => _animator.Color = Color.White);
-            //};
+
             _spriteAnimator.SetLocalOffset(new Vector2(0, -2));
 
             _spriteAnimator.AddAnimation(
@@ -65,7 +60,7 @@ namespace Roguelike.Entities.Characters
         {
             if (!CollisionState.Below && !CollisionState.Above)
             {
-                Velocity.Y += gravity * Time.AltDeltaTime;
+                Velocity.Y += gravity * DeltaTime;
                 Velocity.Y = Math.Min(gravity, Velocity.Y);
             }
             else
@@ -76,7 +71,7 @@ namespace Roguelike.Entities.Characters
             if (CollisionState.Left || CollisionState.Right)
                 Velocity.X = 0f;
 
-            float frameAcceleration = acceleration * Time.AltDeltaTime * xInput;
+            float frameAcceleration = acceleration * DeltaTime * xInput;
 
             if (xInput == 0)
                 frameAcceleration = -Velocity.X * 0.3f;
@@ -123,8 +118,12 @@ namespace Roguelike.Entities.Characters
                     var direction = Vector2Ext.FromDirectionAngle(angle);
                     var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
                     var projectile = Projectile.Create(
-                        new(new ProjectileStats(5f, direction * 6f, 15f, 2f, (int)Teams.Enemy, bounces: 3), projectileSprite.Bounds.Size.ToVector2() - new Vector2(2, 2)),
-                        Entity.Position + direction * 35 
+                        new(
+                            new ProjectileStats(5f, direction * 6f * 60, 15f, 2f, (int)Teams.Enemy, bounces: 3),
+                            projectileSprite.Bounds.Size.ToVector2() - new Vector2(2, 2),
+                            this
+                        ),
+                        Entity.Position
                     );
                     projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite));
                     projectile.Entity.AddComponent(new ProjectileRotator());

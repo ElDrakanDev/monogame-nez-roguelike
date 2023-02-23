@@ -17,14 +17,17 @@ namespace Roguelike.Entities.Projectiles
         public Vector2 Velocity { get => Stats.Velocity; set => Stats.Velocity = value; }
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
         public BoxCollider Collider { get; private set; }
+        public Character Owner;
 
         TiledMapMover _mapMover => Level.Instance.TiledMapMover;
         public TiledMapMover.CollisionState CollisionState = new();
 
-        public Projectile(ProjectileStats stats, Vector2 size)
+        public Projectile() { }
+        public Projectile(ProjectileStats stats, Vector2 size, Character owner)
         {
             Stats = stats;
             Size = size;
+            Owner = owner;
         }
         public static Projectile Create(Projectile projectile, Vector2 position)
         {
@@ -57,12 +60,12 @@ namespace Roguelike.Entities.Projectiles
         {
             if (Stats.GroundCollide)
             {
-                _mapMover.Move(Velocity, Collider, CollisionState);
+                _mapMover.Move(Time.DeltaTime * TimeScale * Velocity, Collider, CollisionState);
                 if (CollisionState.HasCollision) OnWallCollision();
             }
             else
             {
-                Entity.Position += Velocity * Time.DeltaTime * TimeScale;
+                Entity.Position += Time.DeltaTime * TimeScale * Velocity;
             }
         }
         protected virtual void OnWallCollision()
@@ -104,6 +107,7 @@ namespace Roguelike.Entities.Projectiles
                     HitEntities.Contains(neighbor) is false &&
                     Collider.Overlaps(neighbor) &&
                     neighbor.Entity.TryGetComponent(out Character character) &&
+                    character != Owner &&
                     Flags.IsFlagSet(Stats.TargetTeams, (int)character.Team)
                 )
                 {
