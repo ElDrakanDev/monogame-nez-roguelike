@@ -4,13 +4,14 @@ using Nez;
 using Roguelike.Helpers;
 using Roguelike.World;
 using Roguelike.Entities.Characters;
+using Roguelike.Entities.Characters.Players;
 
 namespace Roguelike
 {
     public class BaseLevelScene : Scene
     {
         Level _level;
-        ExamplePlayer _player;
+        Player _player;
         public override void Initialize()
         {
             base.Initialize();
@@ -26,7 +27,7 @@ namespace Roguelike
         public override void Begin()
         {
             base.Begin();
-            _player = Character.Create(new ExamplePlayer(), new Vector2(200, 200));
+            _player = Character.Create(new Player(), new Vector2(200, 200));
             var cameraFollow = Camera.AddComponent(new CameraFollow());
             cameraFollow.AddTarget(_player.Transform);
             SwitchRoom(Point.Zero);
