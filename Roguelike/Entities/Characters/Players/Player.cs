@@ -5,11 +5,15 @@ using Microsoft.Xna.Framework.Input;
 using Nez.Sprites;
 using Roguelike.Entities.Projectiles;
 using System;
+using System.Collections.Generic;
+using Roguelike.Weapons;
 
 namespace Roguelike.Entities.Characters.Players
 {
     public class Player : Character
     {
+        public static List<Player> Players { get; private set; } = new();
+
         const string IDLE_ANIM = "IDLE";
         const string RUN_ANIM = "RUN";
         const string AIR_ANIM = "AIR";
@@ -18,9 +22,6 @@ namespace Roguelike.Entities.Characters.Players
         float acceleration = 40f * 60;
         float gravity = 30f * 60;
         float jumpForce = -14f * 60;
-
-        float _cooldown = 0.5f;
-        float _counter;
 
         protected InputHandler _inputHandler;
 
@@ -33,11 +34,22 @@ namespace Roguelike.Entities.Characters.Players
             TargetTeams = (int)Teams.Enemy;
         }
 
+        public override void OnEnabled()
+        {
+            base.OnEnabled();
+            Players.Add(this);
+        }
+        public override void OnDisabled()
+        {
+            base.OnDisabled();
+            Players.Remove(this);
+        }
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
 
             _inputHandler = Entity.AddComponent(new InputHandler());
+            Entity.AddComponent(new ExampleWeapon());
            
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
             var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
@@ -57,7 +69,6 @@ namespace Roguelike.Entities.Characters.Players
 
             Movement();
             UpdateAnimation();
-            Shoot();
         }
         void Movement()
         {
@@ -84,12 +95,12 @@ namespace Roguelike.Entities.Characters.Players
             if (Math.Abs(Velocity.X + frameAcceleration) < speed)
                 Velocity.X += frameAcceleration;
 
-            if (_inputHandler.JumpButton.IsPressed && CollisionState.Below)
+            if (_inputHandler.JumpButton.IsPressed)
             {
-                if (CollisionState.IsGroundedOnOneWayPlatform && _inputHandler.MoveDirection.Y > 0d)
-                    CollisionState.ShouldTestPlatforms = false;
-                else
+                if(CollisionState.Below && (_inputHandler.MoveDirection.Y <= 0 || !CollisionState.IsGroundedOnOneWayPlatform))
                     Velocity.Y = jumpForce;
+                else if (_inputHandler.MoveDirection.Y > 0)
+                    CollisionState.ShouldTestPlatforms = false;
             }
             else if(!_inputHandler.JumpButton.IsDown) CollisionState.ShouldTestPlatforms = true;
         }
@@ -110,36 +121,6 @@ namespace Roguelike.Entities.Characters.Players
 
             if (animation != null && !_spriteAnimator.IsAnimationActive(animation))
                 _spriteAnimator.Play(animation);
-        }
-
-        void Shoot()
-        {
-            int shots = 3;
-            float spread = 45 * Mathf.Deg2Rad;
-            _counter -= DeltaTime;
-            if (_inputHandler.AttackButton.IsDown && _counter < 0)
-            {
-                var aimDirection = _inputHandler.AimDirection;
-                _counter = _cooldown;
-                for (int i = 0; i < shots; i++)
-                {
-                    float percentage = i / (float)(shots - 1);
-                    float spreadAngle = spread * percentage - spread * 0.5f;
-                    var angle = aimDirection.GetDirectionAngle() + spreadAngle;
-                    var direction = Vector2Ext.FromDirectionAngle(angle);
-                    var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
-                    var projectile = Projectile.Create(
-                        new(
-                            new ProjectileStats(5f, direction * 6f * 60, 15f, 2f, (int)Teams.Enemy, bounces: 3),
-                            projectileSprite.Bounds.Size.ToVector2() - new Vector2(2, 2),
-                            this
-                        ),
-                        Entity.Position
-                    );
-                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite));
-                    projectile.Entity.AddComponent(new ProjectileRotator());
-                }
-            }
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Roguelike
 {
@@ -13,5 +9,6 @@ namespace Roguelike
         Ground = 2,
         Character = 4,
         Projectile = 8,
+        Interactable = 16,
     }
 }
