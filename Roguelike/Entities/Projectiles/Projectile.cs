@@ -47,7 +47,6 @@ namespace Roguelike.Entities.Projectiles
         public override void OnRemovedFromEntity()
         {
             base.OnRemovedFromEntity();
-
             Projectiles.Remove(this);
         }
         public void Update()

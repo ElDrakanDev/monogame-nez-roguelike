@@ -30,6 +30,9 @@
     <None Update="Content\example-ball.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\nez\effects\Outline.mgfxo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\nez\effects\transitions\Squares.mgfxo">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -88,9 +91,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ContentPathGenerator.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\nez\effects\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nez.Portable\Nez.MG38.csproj" />

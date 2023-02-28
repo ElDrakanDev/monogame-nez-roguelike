@@ -21,7 +21,6 @@ C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Content\Tile
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Content\Tiled\TiledRules\AutomappingTiles.png
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Content\Tiled\TiledRules\OrangeBricks.png
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Roguelike.exe
-C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Content\Tiled\Fight\ExampleEnemy.tx
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Roguelike.deps.json
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Roguelike.runtimeconfig.json
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Roguelike.dll
@@ -53,3 +52,4 @@ C:\Users\drakan\source\repos\Roguelike\Roguelike\obj\Release\net6.0\refint\Rogue
 C:\Users\drakan\source\repos\Roguelike\Roguelike\obj\Release\net6.0\Roguelike.pdb
 C:\Users\drakan\source\repos\Roguelike\Roguelike\obj\Release\net6.0\Roguelike.genruntimeconfig.cache
 C:\Users\drakan\source\repos\Roguelike\Roguelike\obj\Release\net6.0\ref\Roguelike.dll
+C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Release\net6.0\Content\Tiled\Templates\Example Enemy.tx

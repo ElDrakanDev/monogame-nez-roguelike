@@ -23,9 +23,10 @@ namespace Nez
 		internal static byte[] DotsBytes => GetFileResourceBytes("Content/nez/effects/Dots.mgfxo");
 
 		internal static byte[] DissolveBytes => GetFileResourceBytes("Content/nez/effects/Dissolve.mgfxo");
+		internal static byte[] OutlineBytes => GetFileResourceBytes("Content/nez/effects/Outline.mgfxo");
 
-		// post processor effects
-		internal static byte[] BloomCombineBytes => GetFileResourceBytes("Content/nez/effects/BloomCombine.mgfxo");
+        // post processor effects
+        internal static byte[] BloomCombineBytes => GetFileResourceBytes("Content/nez/effects/BloomCombine.mgfxo");
 
 		internal static byte[] BloomExtractBytes => GetFileResourceBytes("Content/nez/effects/BloomExtract.mgfxo");
 

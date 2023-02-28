@@ -31,6 +31,7 @@ namespace Roguelike
             var cameraFollow = Camera.AddComponent(new CameraFollow());
             cameraFollow.AddTarget(_player.Transform);
             SwitchRoom(Point.Zero);
+            CreateEntity("fps-counter").AddComponent(new FramesPerSecondCounter());
         }
         public override void Update()
         {
