@@ -63,10 +63,10 @@ namespace Roguelike.Entities.Characters
                     var projectile = Projectile.Create(
                         new(
                             new ProjectileStats(5, direction * 5 * 60, 5, 5, TargetTeams),
-                            projectileSprite.Bounds.Size.ToVector2(),
                             this
                         ),
-                        Entity.Position
+                        Entity.Position,
+                        projectileSprite.Bounds.Size.ToVector2()
                     );
                     projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite) { Color = _shootColor});
                     projectile.Entity.AddComponent(new ProjectileRotator());

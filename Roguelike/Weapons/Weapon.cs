@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using Nez.Sprites;
 using Roguelike.Entities.Characters.Players;
-
+using Roguelike.Entities.Projectiles;
+using System.Collections.Generic;
 
 namespace Roguelike.Weapons
 {
@@ -12,7 +15,6 @@ namespace Roguelike.Weapons
         protected InputHandler _inputHandler;
         protected WeaponStats _baseStats = new();
         public bool AutoAttack = true;
-
         public Weapon() { }
         public abstract void SetDefaults();
 
@@ -77,5 +79,73 @@ namespace Roguelike.Weapons
                 _cooldown = _baseStats.UseTime;
         }
         public abstract void Attack();
+        protected IEnumerable<Projectile> Shoot()
+        {
+            int shots = _baseStats.Shots;
+            float spread = _baseStats.Spread;
+            var baseAngle = _inputHandler.AimDirection.GetDirectionAngle();
+            Vector2 direction;
+
+            if(shots > 1)
+            {
+                for (int i = 0; i < shots; i++)
+                {
+                    if(_baseStats.SpreadMode == SpreadMode.Even)
+                    {
+                        float percentage = shots == 1 ? 0.5f : i / (float)(shots - 1);
+                        float spreadAngle = spread * percentage - spread * 0.5f;
+                        var angle = baseAngle + spreadAngle;
+                        direction = Vector2Ext.FromDirectionAngle(angle);
+                    }
+                    else{
+                        float halfSpread = spread * 0.5f;
+                        var angle = baseAngle + Random.Range(-halfSpread, halfSpread);
+                        direction = Vector2Ext.FromDirectionAngle(angle);
+                    }
+                    var projectile = Projectile.Create(
+                        new Projectile(
+                            new ProjectileStats(
+                                _baseStats.Damage,
+                                direction * _baseStats.ProjectileSpeed,
+                                _baseStats.ProjectileLifetime,
+                                _baseStats.KnockBack,
+                                Owner.TargetTeams,
+                                _baseStats.GroundCollide,
+                                _baseStats.Bounces,
+                                _baseStats.Pierces
+                            ),
+                            Owner
+                        ),
+                        Entity.Position,
+                        Vector2.One
+                    );
+                    yield return projectile;
+                }
+            }
+            else
+            {
+                float halfSpread = spread * 0.5f;
+                var angle = baseAngle + Random.Range(-halfSpread, halfSpread);
+                direction = Vector2Ext.FromDirectionAngle(angle);
+                var projectile = Projectile.Create(
+                    new Projectile(
+                        new ProjectileStats(
+                            _baseStats.Damage,
+                            direction * _baseStats.ProjectileSpeed,
+                            _baseStats.ProjectileLifetime,
+                            _baseStats.KnockBack,
+                            Owner.TargetTeams,
+                            _baseStats.GroundCollide,
+                            _baseStats.Bounces,
+                            _baseStats.Pierces
+                        ),
+                        Owner
+                    ),
+                    Entity.Position,
+                    Vector2.One
+                );
+                yield return projectile;
+            }
+        }
     }
 }

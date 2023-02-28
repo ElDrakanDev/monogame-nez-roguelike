@@ -12,10 +12,11 @@ namespace Roguelike.Entities.Projectiles
         public static readonly List<Projectile> Projectiles = new();
         public readonly List<Collider> HitEntities = new();
         public ProjectileStats Stats;
-        public Vector2 Size { get; set; }
+        public Vector2 Size { get => Collider.Bounds.Size; set => Collider.SetSize(value.X, value.Y); }
         public float LifeTime { get => Stats.LifeTime; set => Stats.LifeTime = value; }
         public Vector2 Velocity { get => Stats.Velocity; set => Stats.Velocity = value; }
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
+        public int Pierces { get => Stats.Pierces; set { Stats.Pierces = value; if (value < 1) Die(); } }
         public BoxCollider Collider { get; private set; }
         public Character Owner;
 
@@ -23,25 +24,24 @@ namespace Roguelike.Entities.Projectiles
         public TiledMapMover.CollisionState CollisionState = new();
 
         public Projectile() { }
-        public Projectile(ProjectileStats stats, Vector2 size, Character owner)
+        public Projectile(ProjectileStats stats, Character owner)
         {
             Stats = stats;
-            Size = size;
             Owner = owner;
         }
-        public static Projectile Create(Projectile projectile, Vector2 position)
+        public static Projectile Create(Projectile projectile, Vector2 position, Vector2 size)
         {
             Core.Scene.AddEntity(new()).AddComponent(projectile);
             projectile.Entity.Position = position;
             projectile.CollisionState.ShouldTestPlatforms = false;
+            projectile.Collider = projectile.Entity.AddComponent(new BoxCollider(size.X, size.Y));
+            projectile.Collider.PhysicsLayer = (int)LayerMask.Projectile;
+            projectile.Collider.CollidesWithLayers = (int)LayerMask.Character;
             return projectile;
         }
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
-            Collider = Entity.AddComponent(new BoxCollider(Size.X, Size.Y));
-            Collider.PhysicsLayer = (int)LayerMask.Projectile;
-            Collider.CollidesWithLayers = (int)LayerMask.Character;
             Projectiles.Add(this);
         }
         public override void OnRemovedFromEntity()
@@ -93,6 +93,10 @@ namespace Roguelike.Entities.Projectiles
             LifeTime -= Time.DeltaTime * TimeScale;
             if (LifeTime <= 0) OnLifeTimeEnd();
         }
+        public void Die()
+        {
+            Entity.Destroy();
+        }
         public void OnLifeTimeEnd()
         {
             Entity.Destroy();
@@ -112,6 +116,7 @@ namespace Roguelike.Entities.Projectiles
                 )
                 {
                     character.HealthManager.Hit(new DamageInfo(Stats.Damage, Stats.KnockBack, this));
+                    Pierces--;
                     HitEntities.Add(neighbor);
                 }
             }
