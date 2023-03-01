@@ -14,6 +14,7 @@ namespace Roguelike.Entities.Characters
         public Vector2 Size { get; set; }
         public Vector2 Velocity;
         public CharacterStats Stats;
+        public Color HurtColor { get => _colorTintEffect.TintColor; set => _colorTintEffect.TintColor = value; }
         public TiledMapMover.CollisionState CollisionState = new();
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
         public float DeltaTime => Stats.TimeScale * Time.DeltaTime;
@@ -23,6 +24,7 @@ namespace Roguelike.Entities.Characters
         TiledMapMover _mapMover => Level.Instance.TiledMapMover;
         public Teams Team;
         public int TargetTeams;
+        ColorTintEffect _colorTintEffect;
         public Character()
         {
             SetDefaults();
@@ -43,8 +45,9 @@ namespace Roguelike.Entities.Characters
             base.OnAddedToEntity();
 
             Characters.Add(this);
-
+            _colorTintEffect = new ColorTintEffect(Color.Red);
             _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
+            _spriteAnimator.Material = new Material();
             HealthManager = Entity.AddComponent(new HealthManager(Stats.MaxHealth, Stats.Health, 1));
             Collider = Entity.AddComponent(new BoxCollider(Size.X, Size.Y));
             Collider.PhysicsLayer = (int)LayerMask.Character;
@@ -64,10 +67,9 @@ namespace Roguelike.Entities.Characters
         #endregion
         public virtual void OnDamageTaken(DamageInfo damageInfo)
         {
-            Color initial = _spriteAnimator.Color == Color.Red ? Color.White : _spriteAnimator.Color;
-            _spriteAnimator.Color = Color.Red;
+            _spriteAnimator.Material.Effect = _colorTintEffect;
             Velocity += damageInfo.Knockback;
-            Core.Schedule(0.1f, _ => _spriteAnimator.Color = initial);
+            Core.Schedule(damageInfo.Damage / HealthManager.MaxHealth, _ => _spriteAnimator.Material.Effect = null);
         }
         public virtual void Die(DeathInfo deathInfo)
         {

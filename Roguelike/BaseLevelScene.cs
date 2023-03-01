@@ -15,10 +15,13 @@ namespace Roguelike
         public override void Initialize()
         {
             base.Initialize();
-
-            SetDesignResolution(800, 600, SceneResolutionPolicy.BestFit);
+            Camera.MaximumZoom = 2;
+            Camera.MinimumZoom = 0.75f;
+            Camera.Zoom = 0;
+            SetDesignResolution(800, 600, SceneResolutionPolicy.None);
             Screen.SetSize(800, 600);
             RNG.Initialize(1);
+
             Camera.AddComponent(new CameraBounds());
             _level = LevelGenerator.GenerateLevel(ContentPath.Tiled.Directory, new() { { RoomType.Fight, 2}, {RoomType.Boss, 1 }, {RoomType.Shop, 1 } });
             CreateEntity("level").AddComponent(_level);
@@ -55,6 +58,9 @@ namespace Roguelike
                 if (_level.CanMove(PointExt.Right))
                     SwitchRoom(PointExt.Right);
             }
+
+            Camera.Zoom = Camera.Zoom += 0.001f * Input.MouseWheelDelta;
+
             base.Update();
         }
 

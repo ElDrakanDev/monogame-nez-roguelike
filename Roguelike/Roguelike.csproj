@@ -30,6 +30,12 @@
     <None Update="Content\example-ball.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\nez\effects\ColorTint.mgfxo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\nez\effects\Grayscale.mgfxo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\nez\effects\Outline.mgfxo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

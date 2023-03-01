@@ -7,33 +7,33 @@ namespace Roguelike.Weapons
 {
     public class ExampleWeapon : Weapon
     {
-        // ========= NORMAL ===========
+        //// ========= NORMAL ===========
+        //public override void SetDefaults()
+        //{
+        //    _baseStats.Damage = 0.01f;
+        //    _baseStats.AttacksPerSecond = 1000f;
+        //    _baseStats.Spread = 45 * Mathf.Deg2Rad;
+        //    _baseStats.Shots = 10;
+        //    _baseStats.Bounces = 1;
+        //    _baseStats.ProjectileSpeed = 1000f;
+        //    _baseStats.KnockBack = 5;
+        //    _baseStats.ProjectileLifetime = 0.5f;
+        //}
+
+        // ========= CHARGED ==========
         public override void SetDefaults()
         {
             _baseStats.Damage = 1;
-            _baseStats.AttacksPerSecond = 100f;
-            _baseStats.Spread = 45 * Mathf.Deg2Rad;
-            _baseStats.Shots = 1;
+            _baseStats.AttacksPerSecond = 0.8f;
+            _baseStats.Spread = 60 * Mathf.Deg2Rad;
+            _baseStats.Shots = 30;
             _baseStats.Bounces = 1;
-            _baseStats.ProjectileSpeed = 1000f;
+            _baseStats.ProjectileSpeed = 600f;
             _baseStats.KnockBack = 5;
-            _baseStats.ProjectileLifetime = 0.5f;
+            _baseStats.UseMode = WeaponUseMode.Charged;
+            _baseStats.SpreadMode = SpreadMode.Random;
+            AutoAttack = false;
         }
-
-        // ========= CHARGED ==========
-        //public override void SetDefaults()
-        //{
-        //    _baseStats.Damage = 1;
-        //    _baseStats.AttacksPerSecond = 0.8f;
-        //    _baseStats.Spread = 60 * Mathf.Deg2Rad;
-        //    _baseStats.Shots = 15;
-        //    _baseStats.Bounces = 1;
-        //    _baseStats.ProjectileSpeed = 600f;
-        //    _baseStats.KnockBack = 5;
-        //    _baseStats.UseMode = WeaponUseMode.Charged;
-        //    _baseStats.SpreadMode = SpreadMode.Random;
-        //    AutoAttack = false;
-        //}
 
         public override void Attack()
         {

@@ -54,3 +54,4 @@ C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\nez\ef
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\example-ball.png
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\Tiled\Templates\Example Enemy.tx
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\nez\effects\Outline.mgfxo
+C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\nez\effects\ColorTint.mgfxo

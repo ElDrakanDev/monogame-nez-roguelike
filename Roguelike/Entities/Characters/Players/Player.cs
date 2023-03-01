@@ -25,8 +25,6 @@ namespace Roguelike.Entities.Characters.Players
 
         protected InputHandler _inputHandler;
 
-        OutlineEffect _outlineEffect;
-
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -55,10 +53,6 @@ namespace Roguelike.Entities.Characters.Players
            
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
             var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
-
-            _outlineEffect = new OutlineEffect(texture.Bounds.Size.ToVector2());
-            _spriteAnimator.Material = new Material(_outlineEffect);
-
 
             _spriteAnimator.AddAnimation(
                 IDLE_ANIM, new[] { sprites[0], sprites[1], sprites[2] }
