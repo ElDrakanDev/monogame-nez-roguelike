@@ -5,6 +5,7 @@ using Nez.Tiled;
 using Roguelike.World;
 using Nez.Sprites;
 using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Roguelike.Entities.Characters
 {
@@ -47,7 +48,7 @@ namespace Roguelike.Entities.Characters
             Characters.Add(this);
             _colorTintEffect = new ColorTintEffect(Color.Red);
             _spriteAnimator = Entity.AddComponent(new SpriteAnimator());
-            _spriteAnimator.Material = new Material();
+            _spriteAnimator.Material = new Material(BlendState.NonPremultiplied);
             HealthManager = Entity.AddComponent(new HealthManager(Stats.MaxHealth, Stats.Health, 1));
             Collider = Entity.AddComponent(new BoxCollider(Size.X, Size.Y));
             Collider.PhysicsLayer = (int)LayerMask.Character;

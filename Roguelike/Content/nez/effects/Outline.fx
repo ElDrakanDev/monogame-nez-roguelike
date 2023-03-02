@@ -14,7 +14,7 @@ float4 mainPixel(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords
 	alpha = max(alpha, tex2D(s0, coords + offsetY).a);
 	alpha = max(alpha, tex2D(s0, coords - offsetY).a);
 
-	float4 color = tex2D(s0, coords);
+	float4 color = tex2D(s0, coords) * color1;
 	if (alpha > color.a)
 	{
 		color.rgb = _outlineColor.rgb;

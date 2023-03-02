@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nez;
+using Nez.Sprites;
 using Nez.Tiled;
 using Roguelike.Entities.Characters;
 using Roguelike.World;
@@ -17,6 +20,15 @@ namespace Roguelike.Entities.Projectiles
         public Vector2 Velocity { get => Stats.Velocity; set => Stats.Velocity = value; }
         public float TimeScale { get => Stats.TimeScale; set => Stats.TimeScale = value; }
         public int Pierces { get => Stats.Pierces; set { Stats.Pierces = value; if (value < 1) Die(); } }
+        public int TargetTeams
+        {
+            get => Stats.TargetTeams;
+            set
+            {
+                Stats.TargetTeams = value;
+                Core.StartCoroutine(SwitchTeamMaterial());
+            }
+        }
         public BoxCollider Collider { get; private set; }
         public Character Owner;
 
@@ -38,6 +50,11 @@ namespace Roguelike.Entities.Projectiles
             projectile.Collider.PhysicsLayer = (int)LayerMask.Projectile;
             projectile.Collider.CollidesWithLayers = (int)LayerMask.Character;
             return projectile;
+        }
+        public override void Initialize()
+        {
+            base.Initialize();
+            TargetTeams = Stats.TargetTeams;
         }
         public override void OnAddedToEntity()
         {
@@ -108,8 +125,8 @@ namespace Roguelike.Entities.Projectiles
                 if (
                     neighbor.Enabled &&
                     HitEntities.Contains(neighbor) is false &&
-                    Collider.Overlaps(neighbor) &&
                     neighbor.Entity.TryGetComponent(out Character character) &&
+                    Collider.Overlaps(neighbor) &&
                     character != Owner &&
                     Flags.IsFlagSet(Stats.TargetTeams, (int)character.Team)
                 )
@@ -118,6 +135,25 @@ namespace Roguelike.Entities.Projectiles
                     Pierces--;
                     HitEntities.Add(neighbor);
                 }
+            }
+        }
+
+        IEnumerator SwitchTeamMaterial()
+        {
+            yield return null;
+            if (Entity != null && Entity.TryGetComponent(out SpriteRenderer renderer))
+            {
+                if (Flags.IsFlagSet(Stats.TargetTeams, (int)Teams.Player))
+                {
+                    if (renderer.Material == null)
+                        renderer.Material = new Material(BlendState.NonPremultiplied);
+                    Vector2 spriteSize = renderer.Sprite.SourceRect.Size.ToVector2();
+                    OutlineEffect outlineEffect = new OutlineEffect(spriteSize);
+                    outlineEffect.OutlineColor = Color.Red;
+                    renderer.Material.Effect = outlineEffect;
+                }
+                else if (renderer.Material != null)
+                    renderer.Material.Effect = null;
             }
         }
     }

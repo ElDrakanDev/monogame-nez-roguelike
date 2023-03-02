@@ -59,7 +59,10 @@ namespace Roguelike
                     SwitchRoom(PointExt.Right);
             }
 
-            Camera.Zoom = Camera.Zoom += 0.001f * Input.MouseWheelDelta;
+            if (Input.IsKeyPressed(Keys.Enter))
+                Time.TimeScale = Time.TimeScale > 0 ? 0 : 1;
+
+            Camera.Zoom = Camera.Zoom += 0.0005f * Input.MouseWheelDelta;
 
             base.Update();
         }

@@ -7,6 +7,7 @@ using Roguelike.Entities.Projectiles;
 using System;
 using System.Collections.Generic;
 using Roguelike.Weapons;
+using System.Numerics;
 
 namespace Roguelike.Entities.Characters.Players
 {
@@ -18,10 +19,10 @@ namespace Roguelike.Entities.Characters.Players
         const string RUN_ANIM = "RUN";
         const string AIR_ANIM = "AIR";
 
-        float speed = 8f * 60;
-        float acceleration = 40f * 60;
-        float gravity = 30f * 60;
-        float jumpForce = -14f * 60;
+        float speed = 6f * 60;
+        float acceleration = 32f * 60;
+        float gravity = 24f * 60;
+        float jumpForce = -12f * 60;
 
         protected InputHandler _inputHandler;
 
@@ -61,6 +62,8 @@ namespace Roguelike.Entities.Characters.Players
                 RUN_ANIM, new[] { sprites[3], sprites[4], sprites[5] }
             );
             _spriteAnimator.AddAnimation(AIR_ANIM, new[] { sprites[6] });
+            HealthManager.preDamageTaken += IgnoreHit;
+
         }
 
         public override void Update()
@@ -122,5 +125,24 @@ namespace Roguelike.Entities.Characters.Players
             if (animation != null && !_spriteAnimator.IsAnimationActive(animation))
                 _spriteAnimator.Play(animation);
         }
+
+        [Nez.Console.Command("godmode", "Toggles player invulnerability")]
+        public static void Godmode()
+        {
+            foreach(var player in Players)
+            {
+                _godmode = !_godmode;
+                if(_godmode is true)
+                {
+                    player.HealthManager.preDamageTaken += IgnoreHit;
+                }
+                else
+                {
+                    player.HealthManager.preDamageTaken -= IgnoreHit;
+                }
+            }
+        }
+        static bool _godmode = false;
+        static void IgnoreHit(DamageInfo info) => info.Canceled = true;
     }
 }

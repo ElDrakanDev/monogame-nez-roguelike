@@ -8,9 +8,8 @@ namespace Roguelike.Entities.Characters
 {
     public class ExampleEnemy : Character
     {
-        const float MAX_COOLDOWN = 1.5f;
+        const float MAX_COOLDOWN = 0f;
         float _cooldown = MAX_COOLDOWN;
-        Color _shootColor = Color.Red;
         public override void SetDefaults()
         {
             base.SetDefaults();
@@ -26,13 +25,6 @@ namespace Roguelike.Entities.Characters
 
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
             _spriteAnimator.Sprite = new Sprite(texture);
-            if (Random.Chance(0.3f))
-            {
-                _spriteAnimator.Color = Color.Green;
-                Team = Teams.Player;
-                TargetTeams = (int)Teams.Enemy;
-                _shootColor = Color.White;
-            }
         }
         public override void Update()
         {
@@ -62,13 +54,13 @@ namespace Roguelike.Entities.Characters
                     var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
                     var projectile = Projectile.Create(
                         new(
-                            new ProjectileStats(5, direction * 5 * 60, 5, 5, TargetTeams),
+                            new ProjectileStats(5, direction * 5 * 60, 20f, 10, TargetTeams, bounces: 3),
                             this
                         ),
                         Entity.Position,
                         projectileSprite.Bounds.Size.ToVector2()
                     );
-                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite) { Color = _shootColor});
+                    projectile.Entity.AddComponent(new SpriteRenderer(projectileSprite));
                     projectile.Entity.AddComponent(new ProjectileRotator());
                 }
             }
