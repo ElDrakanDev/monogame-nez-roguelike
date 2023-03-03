@@ -5,6 +5,8 @@ using Roguelike.Helpers;
 using Roguelike.World;
 using Roguelike.Entities.Characters;
 using Roguelike.Entities.Characters.Players;
+using Roguelike.Entities;
+using Nez.Sprites;
 
 namespace Roguelike
 {
@@ -25,7 +27,14 @@ namespace Roguelike
             Camera.AddComponent(new CameraBounds());
             _level = LevelGenerator.GenerateLevel(ContentPath.Tiled.Directory, new() { { RoomType.Fight, 2}, {RoomType.Boss, 1 }, {RoomType.Shop, 1 } });
             CreateEntity("level").AddComponent(_level);
-    
+            CreateEntity("fps-counter").AddComponent(new FramesPerSecondCounter());
+
+            var interactable = CreateEntity("ExampleInteractable")
+                .AddComponent(new Interactable())
+                .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.MM35_gb_Megaman)))
+                .AddComponent(new BoxCollider());
+            interactable.Entity.Position = new Vector2(200, 400);
+            AddEntity(interactable.Entity.Clone()).Position = new Vector2(400, 400);
         }
         public override void Begin()
         {
@@ -34,7 +43,6 @@ namespace Roguelike
             var cameraFollow = Camera.AddComponent(new CameraFollow());
             cameraFollow.AddTarget(_player.Transform);
             SwitchRoom(Point.Zero);
-            CreateEntity("fps-counter").AddComponent(new FramesPerSecondCounter());
         }
         public override void Update()
         {

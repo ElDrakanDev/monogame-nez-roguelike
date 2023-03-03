@@ -1,13 +1,9 @@
 ﻿using Nez.Textures;
 using Nez;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Nez.Sprites;
-using Roguelike.Entities.Projectiles;
 using System;
 using System.Collections.Generic;
 using Roguelike.Weapons;
-using System.Numerics;
+using Roguelike.Helpers;
 
 namespace Roguelike.Entities.Characters.Players
 {
@@ -62,8 +58,6 @@ namespace Roguelike.Entities.Characters.Players
                 RUN_ANIM, new[] { sprites[3], sprites[4], sprites[5] }
             );
             _spriteAnimator.AddAnimation(AIR_ANIM, new[] { sprites[6] });
-            HealthManager.preDamageTaken += IgnoreHit;
-
         }
 
         public override void Update()
@@ -72,6 +66,7 @@ namespace Roguelike.Entities.Characters.Players
 
             Movement();
             UpdateAnimation();
+            Interact();
         }
         void Movement()
         {
@@ -124,6 +119,27 @@ namespace Roguelike.Entities.Characters.Players
 
             if (animation != null && !_spriteAnimator.IsAnimationActive(animation))
                 _spriteAnimator.Play(animation);
+        }
+
+        void Interact()
+        {
+            var neighbors = Physics.BoxcastBroadphaseExcludingSelf(Collider, (int)LayerMask.Interactable);
+            List<Entity> interactables = new List<Entity>();
+            foreach (var neighbor in neighbors)
+            {
+                if (Collider.Overlaps(neighbor))
+                {
+                    interactables.Add(neighbor.Entity);
+                }
+            }
+            var closest = interactables.Closest();
+            if(closest != null)
+            {
+                if (_inputHandler.InteractButton.IsPressed is false)
+                    Interactable.OnHover(Entity, closest);
+                else
+                    Interactable.OnInteract(Entity, closest);
+            }
         }
 
         [Nez.Console.Command("godmode", "Toggles player invulnerability")]

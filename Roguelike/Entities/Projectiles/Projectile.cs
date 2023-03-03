@@ -26,7 +26,7 @@ namespace Roguelike.Entities.Projectiles
             set
             {
                 Stats.TargetTeams = value;
-                Core.StartCoroutine(SwitchTeamMaterial());
+                SwitchTeamMaterial();
             }
         }
         public BoxCollider Collider { get; private set; }
@@ -43,7 +43,7 @@ namespace Roguelike.Entities.Projectiles
         }
         public static Projectile Create(Projectile projectile, Vector2 position, Vector2 size)
         {
-            Core.Scene.AddEntity(new()).AddComponent(projectile);
+            Nez.Core.Scene.AddEntity(new()).AddComponent(projectile);
             projectile.Entity.Position = position;
             projectile.CollisionState.ShouldTestPlatforms = false;
             projectile.Collider = projectile.Entity.AddComponent(new BoxCollider(size.X, size.Y));
@@ -51,15 +51,11 @@ namespace Roguelike.Entities.Projectiles
             projectile.Collider.CollidesWithLayers = (int)LayerMask.Character;
             return projectile;
         }
-        public override void Initialize()
-        {
-            base.Initialize();
-            TargetTeams = Stats.TargetTeams;
-        }
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
             Projectiles.Add(this);
+            TargetTeams = Stats.TargetTeams;
         }
         public override void OnRemovedFromEntity()
         {
@@ -138,9 +134,8 @@ namespace Roguelike.Entities.Projectiles
             }
         }
 
-        IEnumerator SwitchTeamMaterial()
+        void SwitchTeamMaterial()
         {
-            yield return null;
             if (Entity != null && Entity.TryGetComponent(out SpriteRenderer renderer))
             {
                 if (Flags.IsFlagSet(Stats.TargetTeams, (int)Teams.Player))

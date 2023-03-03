@@ -8,7 +8,7 @@ namespace Roguelike.Entities.Characters
 {
     public class ExampleEnemy : Character
     {
-        const float MAX_COOLDOWN = 0f;
+        const float MAX_COOLDOWN = 1.2f;
         float _cooldown = MAX_COOLDOWN;
         public override void SetDefaults()
         {
@@ -54,7 +54,7 @@ namespace Roguelike.Entities.Characters
                     var projectileSprite = Entity.Scene.Content.LoadTexture(ContentPath.Exampleball);
                     var projectile = Projectile.Create(
                         new(
-                            new ProjectileStats(5, direction * 5 * 60, 20f, 10, TargetTeams, bounces: 3),
+                            new ProjectileStats(5, direction * 5 * 60, 20f, 10, TargetTeams),
                             this
                         ),
                         Entity.Position,
