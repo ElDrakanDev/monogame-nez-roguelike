@@ -132,7 +132,7 @@ namespace Roguelike.Entities.Characters.Players
                     interactables.Add(neighbor.Entity);
                 }
             }
-            var closest = interactables.Closest();
+            var closest = interactables.Closest(Entity.Position);
             if(closest != null)
             {
                 if (_inputHandler.InteractButton.IsPressed is false)

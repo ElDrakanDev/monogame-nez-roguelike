@@ -34,7 +34,7 @@ namespace Roguelike
                 .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.MM35_gb_Megaman)))
                 .AddComponent(new BoxCollider());
             interactable.Entity.Position = new Vector2(200, 400);
-            AddEntity(interactable.Entity.Clone()).Position = new Vector2(400, 400);
+            AddEntity(interactable.Entity.Clone()).Position = new Vector2(300, 400);
         }
         public override void Begin()
         {

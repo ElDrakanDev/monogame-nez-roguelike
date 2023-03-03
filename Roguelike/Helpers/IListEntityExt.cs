@@ -6,14 +6,14 @@ namespace Roguelike.Helpers
 {
     public static class IListEntityExt
     {
-        public static Entity Closest(this IList<Entity> list)
+        public static Entity Closest(this IList<Entity> list, Vector2 position)
         {
-            Entity closest = list.Count > 0 ? list[0] : null;
+            Entity closest = null;
             float closestDistance = float.MaxValue;
 
             foreach(var entity in list)
             {
-                float distance = Vector2.Distance(closest.Position, entity.Position);
+                float distance = Vector2.Distance(position, entity.Position);
                 if(distance < closestDistance)
                 {
                     closest = entity;
