@@ -7,6 +7,7 @@ using Roguelike.Entities.Characters;
 using Roguelike.Entities.Characters.Players;
 using Roguelike.Entities;
 using Nez.Sprites;
+using Roguelike.Weapons;
 
 namespace Roguelike
 {
@@ -30,11 +31,15 @@ namespace Roguelike
             CreateEntity("fps-counter").AddComponent(new FramesPerSecondCounter());
 
             var interactable = CreateEntity("ExampleInteractable")
-                .AddComponent(new Interactable())
-                .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.MM35_gb_Megaman)))
+                .AddComponent(new WeaponInteractable(new ExampleChargedWeapon()))
+                .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.ExampleSword)) { Color = Color.Blue })
                 .AddComponent(new BoxCollider());
-            interactable.Entity.Position = new Vector2(200, 400);
-            AddEntity(interactable.Entity.Clone()).Position = new Vector2(300, 400);
+            interactable.Entity.Position = new Vector2(200, 430);
+            var interactable2 = CreateEntity("ExampleInteractable")
+                .AddComponent(new WeaponInteractable(new ExampleWeapon()))
+                .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.ExampleSword)) { Color = Color.Yellow })
+                .AddComponent(new BoxCollider());
+            interactable2.Entity.Position = new Vector2(300, 430);
         }
         public override void Begin()
         {

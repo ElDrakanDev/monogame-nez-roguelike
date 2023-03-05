@@ -30,6 +30,9 @@
     <None Update="Content\example-ball.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\ExampleSword.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\nez\effects\ColorTint.mgfxo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

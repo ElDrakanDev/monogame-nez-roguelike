@@ -2,7 +2,6 @@
 using Nez;
 using System;
 using System.Collections.Generic;
-using Roguelike.Weapons;
 using Roguelike.Helpers;
 
 namespace Roguelike.Entities.Characters.Players
@@ -46,7 +45,6 @@ namespace Roguelike.Entities.Characters.Players
             base.OnAddedToEntity();
 
             _inputHandler = Entity.AddComponent(new InputHandler());
-            Entity.AddComponent(new ExampleWeapon());
            
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
             var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
@@ -156,6 +154,7 @@ namespace Roguelike.Entities.Characters.Players
                 {
                     player.HealthManager.preDamageTaken -= IgnoreHit;
                 }
+                Nez.Console.DebugConsole.Instance.Log($"Set godmode to {_godmode}");
             }
         }
         static bool _godmode = false;

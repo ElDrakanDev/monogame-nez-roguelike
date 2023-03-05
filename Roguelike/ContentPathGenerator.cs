@@ -25,6 +25,8 @@ namespace Nez
 				
 				}
 
+				public const string ColorTint = @"Content\nez\effects\ColorTint.fx";
+				public const string Outline = @"Content\nez\effects\Outline.fx";
 			}
 
 		}
@@ -66,6 +68,13 @@ namespace Nez
 				public const string Rules = @"Content\Tiled\Start\rules.txt";
 			}
 
+			public static class Templates
+			{
+				public const string Directory = @"Content\Tiled\Templates";
+			
+				public const string ExampleEnemy = @"Content\Tiled\Templates\Example Enemy.tx";
+			}
+
 			public static class TiledRules
 			{
 				public const string Directory = @"Content\Tiled\TiledRules";
@@ -83,6 +92,7 @@ namespace Nez
 
 		public const string ContentManager = @"Content\ContentManager.mgcb";
 		public const string Exampleball = @"Content\example-ball.png";
+		public const string ExampleSword = @"Content\ExampleSword.png";
 		public const string MM35_gb_Megaman = @"Content\MM3-5_gb_Megaman.png";
 
 	}

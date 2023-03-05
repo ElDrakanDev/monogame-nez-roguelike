@@ -15,7 +15,7 @@ namespace Roguelike.Entities
         public void OnHover(Entity source);
         public void OnInteract(Entity source);
     }
-    public class Interactable : Component, IUpdatable
+    public abstract class Interactable : Component, IUpdatable
     {
         public static Color InteractColor = Color.White;
         SpriteRenderer _renderer;
@@ -37,14 +37,14 @@ namespace Roguelike.Entities
         public override void OnEnabled()
         {
             base.OnEnabled();
-            Interactable.onHover += Hover;
-            Interactable.onInteract += Interact;
+            Interactable.onHover += OnAnyHover;
+            Interactable.onInteract += OnAnyInteract;
         }
         public override void OnDisabled()
         {
             base.OnDisabled();
-            Interactable.onHover -= Hover;
-            Interactable.onInteract -= Interact;
+            Interactable.onHover -= OnAnyHover;
+            Interactable.onInteract -= OnAnyInteract;
         }
         public virtual void Update()
         {
@@ -57,12 +57,24 @@ namespace Roguelike.Entities
             _isGettingHovered = false;
         }
         
-        protected virtual void Hover(Entity source, Entity hovered)
+        void OnAnyHover(Entity source, Entity hovered)
         {
             if(hovered == Entity)
+            {
                 _isGettingHovered = true;
+                Hover(source);
+            }
         }
-        protected virtual void Interact(Entity source, Entity interacted) { }
+        void OnAnyInteract(Entity source, Entity interacted)
+        {
+            if(interacted == Entity)
+            {
+                Interact(source);
+            }
+        }
+
+        protected virtual void Hover(Entity source) { }
+        protected abstract void Interact(Entity source);
 
         public static event Action<Entity, Entity> onHover;
         public static void OnHover(Entity source, Entity hovered) => onHover?.Invoke(source, hovered);
