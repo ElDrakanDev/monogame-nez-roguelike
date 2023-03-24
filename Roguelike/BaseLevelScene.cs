@@ -30,12 +30,14 @@ namespace Roguelike
             CreateEntity("level").AddComponent(_level);
             CreateEntity("fps-counter").AddComponent(new FramesPerSecondCounter());
 
-            var interactable = CreateEntity("ExampleInteractable")
+            var interactable = CreateEntity("PickableChargedWeapon")
+                .AddComponent(new InteractableOutline())
                 .AddComponent(new WeaponInteractable(new ExampleChargedWeapon()))
                 .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.ExampleSword)) { Color = Color.Blue })
                 .AddComponent(new BoxCollider());
             interactable.Entity.Position = new Vector2(200, 430);
-            var interactable2 = CreateEntity("ExampleInteractable")
+            var interactable2 = CreateEntity("PickableWeapon")
+                .AddComponent(new InteractableOutline())
                 .AddComponent(new WeaponInteractable(new ExampleWeapon()))
                 .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.ExampleSword)) { Color = Color.Yellow })
                 .AddComponent(new BoxCollider());

@@ -3,14 +3,16 @@ using Roguelike.Weapons;
 
 namespace Roguelike.Entities
 {
-    public class WeaponInteractable : Interactable
+    public class WeaponInteractable : Component, IInteractListener
     {
         public Weapon Weapon { get; set; }
         public WeaponInteractable(Weapon weapon)
         {
             Weapon = weapon;
         }
-        protected override void Interact(Entity source)
+
+        public void OnHover(Entity source) { }
+        public void OnInteract(Entity source)
         {
             source.RemoveComponent<Weapon>();
             source.AddComponent(Weapon);

@@ -9,6 +9,8 @@ namespace Roguelike.Entities.Characters.Players
     public class Player : Character
     {
         public static List<Player> Players { get; private set; } = new();
+        List<Entity> _interactables = new();
+        List<IInteractListener> _interactListeners = new();
 
         const string IDLE_ANIM = "IDLE";
         const string RUN_ANIM = "RUN";
@@ -121,22 +123,29 @@ namespace Roguelike.Entities.Characters.Players
 
         void Interact()
         {
+            _interactables.Clear();
+            _interactListeners.Clear();
+
             var neighbors = Physics.BoxcastBroadphaseExcludingSelf(Collider, (int)LayerMask.Interactable);
-            List<Entity> interactables = new List<Entity>();
             foreach (var neighbor in neighbors)
             {
                 if (Collider.Overlaps(neighbor))
                 {
-                    interactables.Add(neighbor.Entity);
+                    _interactables.Add(neighbor.Entity);
                 }
             }
-            var closest = interactables.Closest(Entity.Position);
+            var closest = _interactables.Closest(Entity.Position);
             if(closest != null)
             {
-                if (_inputHandler.InteractButton.IsPressed is false)
-                    Interactable.OnHover(Entity, closest);
-                else
-                    Interactable.OnInteract(Entity, closest);
+                closest.GetComponents(_interactListeners);
+
+                foreach(var listener in _interactListeners)
+                {
+                    if (_inputHandler.InteractButton.IsPressed is false)
+                        listener.OnHover(Entity);
+                    else
+                        listener.OnInteract(Entity);
+                }
             }
         }
 
