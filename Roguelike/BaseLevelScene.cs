@@ -36,12 +36,9 @@ namespace Roguelike
                 .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.ExampleSword)) { Color = Color.Blue })
                 .AddComponent(new BoxCollider());
             interactable.Entity.Position = new Vector2(200, 430);
-            var interactable2 = CreateEntity("PickableWeapon")
-                .AddComponent(new InteractableOutline())
-                .AddComponent(new WeaponInteractable(new ExampleWeapon()))
-                .AddComponent(new SpriteRenderer(Content.LoadTexture(ContentPath.ExampleSword)) { Color = Color.Yellow })
-                .AddComponent(new BoxCollider());
-            interactable2.Entity.Position = new Vector2(300, 430);
+            var interactable2 = interactable.Entity.Clone();
+            interactable2.Position = new Vector2(300, 430);
+            AddEntity(interactable2);
         }
         public override void Begin()
         {
