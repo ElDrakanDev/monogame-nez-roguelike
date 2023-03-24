@@ -56,3 +56,4 @@ C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\Tiled\
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\nez\effects\Outline.mgfxo
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\nez\effects\ColorTint.mgfxo
 C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\ExampleSword.png
+C:\Users\drakan\source\repos\Roguelike\Roguelike\bin\Debug\net6.0\Content\Tiled\Templates\ExampleEnemyButAsTile.tx

@@ -146,7 +146,7 @@ namespace Nez.Systems
 		/// <summary>
 		/// Load the Tiled Template as a Tiled Object
 		/// </summary>
-		public TmxTemplate LoadTmxTemplate(string name)
+		public TmxTemplate LoadTmxTemplate(string name, TmxMap map)
 		{
 			if (LoadedAssets.TryGetValue(name, out var asset))
 			{
@@ -154,7 +154,7 @@ namespace Nez.Systems
 					return template;
 			}
 
-			var tmxTemplate = TiledMapLoader.LoadTmxTemplate(name);
+			var tmxTemplate = TiledMapLoader.LoadTmxTemplate(name, map);
 
 			LoadedAssets[name] = tmxTemplate;
 			DisposableAssets.Add(tmxTemplate);

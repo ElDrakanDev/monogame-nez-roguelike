@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="23">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="26">
  <properties>
   <property name="roomType" value="Start"/>
  </properties>
@@ -51,6 +51,7 @@
   <object id="20" template="../Templates/Example Enemy.tx" x="597.333" y="565.333"/>
   <object id="21" template="../Templates/Example Enemy.tx" x="377.333" y="562.667"/>
   <object id="22" template="../Templates/Example Enemy.tx" x="896" y="556"/>
+  <object id="25" template="../Templates/ExampleEnemyButAsTile.tx" x="577.333" y="685.333"/>
  </objectgroup>
  <layer id="1" name="ground" width="40" height="30">
   <data encoding="csv">

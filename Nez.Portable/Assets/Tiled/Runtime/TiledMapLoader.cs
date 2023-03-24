@@ -699,7 +699,7 @@ namespace Nez.Tiled
 			return image;
 		}
 
-		public static TmxTemplate LoadTmxTemplate(string path)
+		public static TmxTemplate LoadTmxTemplate(string path, TmxMap map)
 		{
 			using (var stream = TitleContainer.OpenStream(path))
 			{
@@ -712,15 +712,23 @@ namespace Nez.Tiled
 				template.Width = (float?)xObject.Attribute("width") ?? 0.0f;
 				template.Height = (float?)xObject.Attribute("height") ?? 0.0f;
 				template.Visible = (bool?)xObject.Attribute("visible") ?? true;
+                template.Y = (float?)xObject.Attribute("y") ?? 0.0f;
+                template.X = (float?)xObject.Attribute("x") ?? 0.0f;
 
-				// Assess object type and assign appropriate content
-				var xEllipse = xObject.Element("ellipse");
+                // Assess object type and assign appropriate content
+                var xGid = xObject.Attribute("gid");
+                var xEllipse = xObject.Element("ellipse");
 				var xPolygon = xObject.Element("polygon");
 				var xPolyline = xObject.Element("polyline");
 				var xText = xObject.Element("text");
 				var xPoint = xObject.Element("point");
 
-				if (xEllipse != null)
+                if (xGid != null)
+                {
+                    template.Tile = new TmxLayerTile(map, (uint)xGid, Convert.ToInt32(Math.Round(template.X)), Convert.ToInt32(Math.Round(template.Y)));
+                    template.ObjectType = TmxObjectType.Tile;
+                }
+                else if (xEllipse != null)
 				{
 					template.ObjectType = TmxObjectType.Ellipse;
 				}

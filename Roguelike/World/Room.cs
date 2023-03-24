@@ -5,6 +5,7 @@ using Nez;
 using Microsoft.Xna.Framework;
 using Roguelike.Entities.Projectiles;
 using Roguelike.Entities.Characters;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Roguelike.World
 {
@@ -130,19 +131,24 @@ namespace Roguelike.World
         }
         void ResetChildCharacters()
         {
+            CreateCharacters();
+        }
+
+        void CreateCharacters()
+        {
             var charactersGroup = Tilemap.GetObjectGroup("characters");
             if (charactersGroup is null) return;
-            foreach(var characterObject in charactersGroup.Objects)
+            foreach (var characterObject in charactersGroup.Objects)
             {
                 try
                 {
                     Type characterType = null;
-                    if(characterObject.Template == string.Empty)
+                    if (characterObject.Template == string.Empty)
                         characterType = System.Type.GetType(characterObject.Type);
                     else
                     {
-                        TmxTemplate template = Entity.Scene.Content.LoadTmxTemplate(characterObject.Template);
-                        characterType = System.Type.GetType(template.Type); ;
+                        TmxTemplate template = Entity.Scene.Content.LoadTmxTemplate(characterObject.Template, Tilemap);
+                        characterType = System.Type.GetType(template.Type);
                     }
                     Character character = Activator.CreateInstance(characterType) as Character;
                     Entity characterEntity = new();
@@ -151,7 +157,7 @@ namespace Roguelike.World
                     _charactersByTmxObject.Add(characterObject, characterEntity);
                     Entity.Scene.AddEntity(characterEntity);
                 }
-                catch(ArgumentException ex)
+                catch (ArgumentException ex)
                 {
                     Debug.Error($"Error creating instance of Character subclass with full name {characterObject.Type}. {ex.Message}");
                 }

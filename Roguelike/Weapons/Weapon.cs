@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Nez;
-using Nez.Sprites;
+using Nez.Console;
+using Nez.Tiled;
 using Roguelike.Entities.Characters.Players;
 using Roguelike.Entities.Projectiles;
 using System.Collections.Generic;
@@ -146,6 +146,32 @@ namespace Roguelike.Weapons
                 );
                 yield return projectile;
             }
+        }
+
+        public static Weapon FromTmxObject(TmxObject obj, TmxMap map)
+        {
+            try
+            {
+                System.Type weaponType;
+                if (obj.Template == string.Empty)
+                    weaponType = System.Type.GetType(obj.Type);
+                else
+                {
+                    TmxTemplate template = Core.Scene.Content.LoadTmxTemplate(obj.Template, map);
+                    weaponType = System.Type.GetType(template.Type);
+                }
+                Weapon weapon = System.Activator.CreateInstance(weaponType) as Weapon;
+                return weapon;
+
+                // TODO: Load stats
+            }
+            catch (System.ArgumentException ex)
+            {
+                string msg = $"Error creating instance of Weapon subclass with full name {obj.Type}. {ex.Message}";
+                Debug.Error(msg);
+                DebugConsole.Instance.Log(msg);
+            }
+            return null;
         }
     }
 }

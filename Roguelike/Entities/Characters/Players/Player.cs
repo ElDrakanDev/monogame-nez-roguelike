@@ -49,6 +49,7 @@ namespace Roguelike.Entities.Characters.Players
             _inputHandler = Entity.AddComponent(new InputHandler());
            
             var texture = Entity.Scene.Content.LoadTexture(ContentPath.MM35_gb_Megaman);
+            
             var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
 
             _spriteAnimator.AddAnimation(

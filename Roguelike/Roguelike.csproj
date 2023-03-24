@@ -72,6 +72,9 @@
     <None Update="Content\Tiled\Templates\Example Enemy.tx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Tiled\Templates\ExampleEnemyButAsTile.tx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Tiled\TiledRules\AutomappingTiles.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

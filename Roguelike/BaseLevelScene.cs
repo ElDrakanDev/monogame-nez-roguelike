@@ -50,6 +50,12 @@ namespace Roguelike
         }
         public override void Update()
         {
+            // Debug render switch
+# if DEBUG
+            if (Input.IsKeyPressed(Keys.F1))
+                Core.DebugRenderEnabled = !Core.DebugRenderEnabled;
+#endif
+            // Test room switching
             if (Input.IsKeyPressed(Keys.Down))
             {
                 if(_level.CanMove(PointExt.Down))
@@ -71,10 +77,11 @@ namespace Roguelike
                     SwitchRoom(PointExt.Right);
             }
 
+            // Test pausing
             if (Input.IsKeyPressed(Keys.Enter))
                 Time.TimeScale = Time.TimeScale > 0 ? 0 : 1;
 
-            Camera.Zoom = Camera.Zoom += 0.0005f * Input.MouseWheelDelta;
+            Camera.Zoom = Camera.Zoom += 0.0004f * Input.MouseWheelDelta;
 
             base.Update();
         }

@@ -12,7 +12,9 @@ namespace Nez.Tiled
 		public string Type;
 		public float Width;
 		public float Height;
-		public TmxLayerTile Tile;
+        public float X;
+        public float Y;
+        public TmxLayerTile Tile;
 		public bool Visible;
 		public TmxText Text;
 
